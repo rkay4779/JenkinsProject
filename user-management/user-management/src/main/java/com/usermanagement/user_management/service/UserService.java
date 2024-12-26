@@ -9,21 +9,23 @@ import java.util.List;
 @Service
 public class UserService {
 
-    // Get all users dynamically from the JSON file
+    // Retrieve all users from the JSON file
     public List<User> getAllUsers() {
-        return JsonStorage.loadUsers();
+        return JsonStorage.loadUsers(); // Always dynamically load the latest data
     }
 
     // Add a new user
     public User addUser(User user) {
         List<User> users = JsonStorage.loadUsers(); // Load current users
-        user.setId((long) (users.size() + 1)); // Generate a unique ID
+        // Generate a unique ID (ensure uniqueness even if some IDs are deleted)
+        long newId = users.stream().mapToLong(User::getId).max().orElse(0) + 1;
+        user.setId(newId);
         users.add(user);
         JsonStorage.saveUsers(users); // Save to JSON file
         return user;
     }
 
-    // Update an existing user
+    // Update an existing user by ID
     public User updateUser(Long id, User updatedUser) {
         List<User> users = JsonStorage.loadUsers(); // Load current users
         for (User user : users) {
@@ -34,7 +36,7 @@ public class UserService {
                 return user;
             }
         }
-        return null; // Return null if user not found
+        return null; // Return null if the user is not found
     }
 
     // Delete a user by ID

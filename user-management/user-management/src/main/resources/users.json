@@ -16,6 +16,10 @@
   "email" : "john.doe@example.com"
 }, {
   "id" : 5,
-  "name" : "5ive DooooRoe",
+  "name" : "nice DooooRoe",
+  "email" : "john.doe@example.com"
+}, {
+  "id" : 6,
+  "name" : "broooooooooooooooo DooooRoe",
   "email" : "john.doe@example.com"
 } ]
