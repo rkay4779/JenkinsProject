@@ -11,28 +11,35 @@ import java.util.List;
 
 public class JsonStorage {
 
-    private static final String FILE_PATH = "users.json"; // Chemin du fichier JSON
+    private static final String FILE_PATH = "users.json"; // JSON file path
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    // Charger les utilisateurs depuis le fichier JSON
+    // Load users from the JSON file
     public static List<User> loadUsers() {
+        File file = new File(FILE_PATH);
+        System.out.println("Resolved file path (loadUsers): " + file.getAbsolutePath());
         try {
-            File file = new File(FILE_PATH);
             if (file.exists()) {
+                System.out.println("Loading users from JSON file...");
                 return objectMapper.readValue(file, new TypeReference<List<User>>() {});
+            } else {
+                System.out.println("JSON file does not exist. Returning an empty list.");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error reading users.json file: " + e.getMessage());
         }
         return new ArrayList<>();
     }
 
-    // Enregistrer les utilisateurs dans le fichier JSON
+    // Save users to the JSON file
     public static void saveUsers(List<User> users) {
+        File file = new File(FILE_PATH);
+        System.out.println("Resolved file path (saveUsers): " + file.getAbsolutePath());
         try {
-            objectMapper.writeValue(new File(FILE_PATH), users);
+            objectMapper.writeValue(file, users);
+            System.out.println("Users saved successfully to the JSON file.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error saving users to JSON file: " + e.getMessage());
         }
     }
 }

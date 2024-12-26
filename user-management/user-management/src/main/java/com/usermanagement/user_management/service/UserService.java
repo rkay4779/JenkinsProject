@@ -9,39 +9,40 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private List<User> users = JsonStorage.loadUsers(); // Charger les données JSON au démarrage
-
-    // Récupérer tous les utilisateurs
+    // Get all users dynamically from the JSON file
     public List<User> getAllUsers() {
-        return users;
+        return JsonStorage.loadUsers();
     }
 
-    // Ajouter un utilisateur
+    // Add a new user
     public User addUser(User user) {
-        user.setId((long) (users.size() + 1)); // Génération d'un ID unique
+        List<User> users = JsonStorage.loadUsers(); // Load current users
+        user.setId((long) (users.size() + 1)); // Generate a unique ID
         users.add(user);
-        JsonStorage.saveUsers(users); // Enregistrer dans le fichier JSON
+        JsonStorage.saveUsers(users); // Save to JSON file
         return user;
     }
 
-    // Mettre à jour un utilisateur
+    // Update an existing user
     public User updateUser(Long id, User updatedUser) {
+        List<User> users = JsonStorage.loadUsers(); // Load current users
         for (User user : users) {
             if (user.getId().equals(id)) {
                 user.setName(updatedUser.getName());
                 user.setEmail(updatedUser.getEmail());
-                JsonStorage.saveUsers(users); // Sauvegarde après modification
+                JsonStorage.saveUsers(users); // Save changes to JSON file
                 return user;
             }
         }
-        return null;
+        return null; // Return null if user not found
     }
 
-    // Supprimer un utilisateur
+    // Delete a user by ID
     public boolean deleteUser(Long id) {
+        List<User> users = JsonStorage.loadUsers(); // Load current users
         boolean removed = users.removeIf(user -> user.getId().equals(id));
         if (removed) {
-            JsonStorage.saveUsers(users); // Sauvegarde après suppression
+            JsonStorage.saveUsers(users); // Save changes to JSON file
         }
         return removed;
     }
