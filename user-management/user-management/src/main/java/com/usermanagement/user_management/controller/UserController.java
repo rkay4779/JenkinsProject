@@ -36,6 +36,21 @@ public class UserController {
             e.printStackTrace();
         }
     }
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        List<User> users = loadUsers();
+
+        for (User user : users) {
+            if (user.getId().equals(id)) {
+                user.setName(updatedUser.getName());
+                user.setEmail(updatedUser.getEmail());
+                saveUsers(users);
+                return user;
+            }
+        }
+        throw new RuntimeException("User not found");
+    }
+
 
     @GetMapping
     public List<User> getUsers() {

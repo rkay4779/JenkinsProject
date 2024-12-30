@@ -148,6 +148,31 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.name").value("John Doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@example.com"));
     }
+    @Test
+    void testUpdateUser() throws Exception {
+        User newUser = new User(null, "Jane Smith", "jane.smith@example.com");
+
+        // Add a new user first
+        String response = mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(newUser)))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        User createdUser = objectMapper.readValue(response, User.class);
+
+        // Update the user details
+        User updatedUser = new User(createdUser.getId(), "Jane Doe", "jane.doe@example.com");
+
+        mockMvc.perform(put("/users/{id}", createdUser.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedUser)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Jane Doe"))
+                .andExpect(jsonPath("$.email").value("jane.doe@example.com"));
+    }
+
 
     @Test
     void testDeleteUser() throws Exception {
