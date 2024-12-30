@@ -9,20 +9,26 @@ pipeline {
         }
         stage('Build') {
             steps {
-                // Use Windows command to build the project
-                bat 'mvn clean package'
+                // Navigate to the directory containing pom.xml
+                dir('user-management/user-management') {
+                    bat 'mvn clean package'
+                }
             }
         }
         stage('Unit Test') {
             steps {
-                // Use Windows command to run tests
-                bat 'mvn test'
+                // Navigate to the directory containing pom.xml
+                dir('user-management/user-management') {
+                    bat 'mvn test'
+                }
             }
         }
         stage('Archive Results') {
             steps {
-                // Archive test results
-                junit '**/target/surefire-reports/*.xml'
+                // Navigate to the directory containing test reports
+                dir('user-management/user-management') {
+                    junit '**/target/surefire-reports/*.xml'
+                }
             }
         }
     }
