@@ -1,1 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from Git
+                checkout scm
+            }
+        }
+        stage('Build') {
+            steps {
+                // Clean and package the project
+                sh 'mvn clean package'
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                // Run unit tests
+                sh 'mvn test'
+            }
+        }
+        stage('Archive Results') {
+            steps {
+                // Archive test results
+                junit '**/target/surefire-reports/*.xml'
+            }
+        }
+    }
+
+    post {
+        always {
+            // Cleanup workspace after build
+            cleanWs()
+        }
+        success {
+            echo 'Build and Unit Tests succeeded!'
+        }
+        failure {
+            echo 'Build or Unit Tests failed!'
+        }
+    }
+}
 
