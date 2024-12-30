@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private static final String JSON_FILE_PATH = "src/main/resources/users. json";
+    private static final String JSON_FILE_PATH = "src/main/resources/users.json";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     // Charger les utilisateurs depuis le fichier JSON
