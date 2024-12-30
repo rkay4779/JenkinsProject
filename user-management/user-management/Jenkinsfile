@@ -4,20 +4,19 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from Git
                 checkout scm
             }
         }
         stage('Build') {
             steps {
-                // Clean and package the project
-                sh 'mvn clean package'
+                // Use Windows command to build the project
+                bat 'mvn clean package'
             }
         }
         stage('Unit Test') {
             steps {
-                // Run unit tests
-                sh 'mvn test'
+                // Use Windows command to run tests
+                bat 'mvn test'
             }
         }
         stage('Archive Results') {
@@ -30,7 +29,6 @@ pipeline {
 
     post {
         always {
-            // Cleanup workspace after build
             cleanWs()
         }
         success {
@@ -41,4 +39,3 @@ pipeline {
         }
     }
 }
-
